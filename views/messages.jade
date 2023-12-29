@@ -1,0 +1,53 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Message App
+
+  body(style="background-color: black; color: green; font-family: monospace; display: flex; flex-direction: column; align-items: flex-start; margin: 0; overflow: hidden;")
+    h3(style="white-space: pre;")
+      | ██╗  ██╗ █████╗ ███╗   ██╗██╗   ██╗███████╗    ██╗  ██╗    ██╗  ██╗██╗███╗   ██╗ ██████╗ 
+      | ██║ ██╔╝██╔══██╗████╗  ██║╚██╗ ██╔╝██╔════╝    ██║  ██║    ██║ ██╔╝██║████╗  ██║██╔════╝ 
+      | █████╔╝ ███████║██╔██╗ ██║ ╚████╔╝ █████╗      ███████║    █████╔╝ ██║██╔██╗ ██║██║  ███╗
+      | ██╔═██╗ ██╔══██║██║╚██╗██║  ╚██╔╝  ██╔══╝      ╚════██║    ██╔═██╗ ██║██║╚██╗██║██║   ██║
+      | ██║  ██╗██║  ██║██║ ╚████║   ██║   ███████╗         ██║    ██║  ██╗██║██║ ╚████║╚██████╔╝
+
+    // Messages container at the top
+    div(style="flex: 1; overflow-y: auto; width: 100%; padding: 10px;")
+      ul(style="list-style-type: none; padding: 0; margin: 0;")
+        each message in messages
+          li= message
+
+    // Textbox container at the bottom
+    div(style="width: 100%; padding: 10px; position: relative;")
+      form(id="messageForm", action="/messages/send", method="post")
+
+        label(for="message" style="display: block; position: relative;") 
+        div(style="position: relative;")
+          input(type="text", id="message", name="message", style="width: calc(100% - 22px); padding: 5px 20px 5px 30px; margin-bottom: 10px; background-color: black; color: green; border: none; outline: none; font-family: monospace;", required)
+          span(id="promptSymbol" style="color: green; font-family: monospace; position: absolute; top: calc(50% - 10px); transform: translateY(-50%); left: 10px;") >
+
+        button(type="submit" style="padding: 5px; cursor: pointer; background-color: black; color: green; border: none; outline: none; font-family: monospace;")
+
+      script.
+        document.addEventListener('DOMContentLoaded', function() {
+          var messageTextbox = document.getElementById('message');
+          var promptSymbol = document.getElementById('promptSymbol');
+
+          messageTextbox.addEventListener('focus', function() {
+            promptSymbol.textContent = '';
+          });
+
+          messageTextbox.addEventListener('blur', function() {
+            if (messageTextbox.value === '') {
+              promptSymbol.textContent = '>';
+            }
+          });
+
+          // Initial check
+          if (messageTextbox !== document.activeElement || messageTextbox.value === '') {
+            promptSymbol.textContent = '>';
+            messageTextbox.focus();
+          }
+        });
